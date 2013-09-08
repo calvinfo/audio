@@ -5,6 +5,7 @@
 
 var domify = require('domify')
   , event = require('event')
+  , Emitter = require('emitter')
   , html = require('./template')
   , Progress = require('./progress');
 
@@ -31,6 +32,12 @@ function Audio(el) {
   event.bind(this.el, 'click', this.toggle.bind(this));
   event.bind(el, 'timeupdate', this.ontimeupdate.bind(this));
 }
+
+/**
+ * Inherit from `Emitter.prototype`.
+ */
+
+Audio.prototype = new Emitter;
 
 /**
  * Update playback process indicator.
@@ -68,6 +75,7 @@ Audio.prototype.toggle = function(e){
 Audio.prototype.play = function(){
   this.audio.play();
   this.el.className = 'audio playing';
+  this.emit('playing');
 };
 
 /**
@@ -79,5 +87,6 @@ Audio.prototype.play = function(){
 Audio.prototype.pause = function(){
   this.audio.pause();
   this.el.className = 'audio paused';
+  this.emit('paused');
 };
 
